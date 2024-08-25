@@ -11,6 +11,8 @@ export interface IUser {
   password?: string;
   phone: string;
   address: string;
+  isDeleted: boolean;
+  passwordChangedAt?: Date;
 }
 
 // User Static Model
@@ -20,6 +22,10 @@ export interface UserModel extends Model<IUser> {
     plainTextPassword: string,
     hashedPassword: string,
   ): Promise<boolean>;
+  isJWTIssuedBeforePasswordChanged(
+    passwordChangedTimestamp: Date,
+    jwtIssuedTimestamp: number,
+  ): boolean;
 }
 
 // SignIn User interface

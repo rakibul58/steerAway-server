@@ -31,25 +31,41 @@ const auth = (...requiredRoles: TUserRole[]) => {
     const accessToken = spiltToken[1];
 
     // checking if the given token is valid
-    const decoded = jwt.verify(
-      accessToken,
-      config.jwt_access_secret as string,
-    ) as JwtPayload;
-
-    if (!decoded) {
-      throw new AppError(
-        httpStatus.UNAUTHORIZED,
-        'You have no access to this route',
-      );
+    let decoded;
+    try {
+      // checking if the given token is valid
+      decoded = jwt.verify(
+        accessToken,
+        config.jwt_access_secret as string,
+      ) as JwtPayload;
+    } catch (error) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
     }
 
-    const { role, email } = decoded;
+    const { role, email, iat } = decoded;
 
     // checking if the user exists
     const user = await User.isUserExistsByEmail(email);
 
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
+    }
+
+    // checking if the user is already deleted
+    const isDeleted = user?.isDeleted;
+
+    if (isDeleted) {
+      throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
+    }
+
+    if (
+      user.passwordChangedAt &&
+      User.isJWTIssuedBeforePasswordChanged(
+        user.passwordChangedAt,
+        iat as number,
+      )
+    ) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
     }
 
     // checking the role is correct

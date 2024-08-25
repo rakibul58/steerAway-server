@@ -34,8 +34,17 @@ const signinValidationSchema = z.object({
   }),
 });
 
+const refreshTokenValidationSchema = z.object({
+  cookies: z.object({
+    refreshToken: z.string({
+      required_error: 'Refresh token is required!',
+    }),
+  }),
+});
+
 // exporting the schema
 export const UserValidations = {
   userRegisterValidationSchema,
   signinValidationSchema,
+  refreshTokenValidationSchema,
 };
