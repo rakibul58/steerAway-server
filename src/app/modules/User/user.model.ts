@@ -2,7 +2,7 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
-import { userTypes } from './user.constant';
+import { USER_ROLE, userTypes } from './user.constant';
 import { IUser, UserModel } from './user.interface';
 
 // user schema
@@ -22,9 +22,9 @@ const userSchema = new Schema<IUser, UserModel>(
       select: 0,
     },
     role: {
-      required: true,
       type: String,
       enum: userTypes,
+      default: USER_ROLE.user
     },
     phone: {
       type: String,

@@ -36,6 +36,10 @@ const carSchema = new Schema<ICar, CarModel>(
       type: Number,
       required: true,
     },
+    carType: {
+      type: String || null,
+      default: null,
+    },
     isDeleted: {
       type: Boolean,
       default: false,

@@ -8,6 +8,7 @@ export interface ICar {
   status?: 'available' | 'unavailable';
   features: string[];
   pricePerHour: number;
+  carType: string | null;
   isDeleted?: boolean;
 }
 

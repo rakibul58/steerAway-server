@@ -8,9 +8,12 @@ const userRegisterValidationSchema = z.object({
       .string({ required_error: 'Email is required!' })
       .trim()
       .email({ message: 'Please enter a valid email' }),
-    role: z.enum(['admin', 'user'], {
-      invalid_type_error: 'Enter a valid role',
-    }),
+    role: z
+      .enum(['admin', 'user'], {
+        invalid_type_error: 'Enter a valid role',
+      })
+      .optional()
+      .default('user'),
     password: z
       .string()
       .max(20, "Password can't be more than 20 characters!")
@@ -34,6 +37,7 @@ const signinValidationSchema = z.object({
   }),
 });
 
+// refresh token cookie validation
 const refreshTokenValidationSchema = z.object({
   cookies: z.object({
     refreshToken: z.string({

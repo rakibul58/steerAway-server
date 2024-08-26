@@ -8,6 +8,7 @@ const createCarValidationSchema = z.object({
       .string({ required_error: 'Description is required!' })
       .trim(),
     color: z.string({ required_error: 'Color is required!' }).trim(),
+    carType: z.string().trim().nullable().optional().default(null),
     isElectric: z.boolean({ required_error: 'isElectric is required!' }),
     status: z
       .enum(['available', 'unavailable'], {
@@ -30,6 +31,7 @@ const updateCarValidationSchema = z.object({
       .trim()
       .optional(),
     color: z.string({ required_error: 'Color is required!' }).trim().optional(),
+    carType: z.string().trim().nullable().optional().default(null),
     isElectric: z
       .boolean({ required_error: 'isElectric is required!' })
       .optional(),

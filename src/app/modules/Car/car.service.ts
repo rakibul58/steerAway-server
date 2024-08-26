@@ -4,6 +4,8 @@ import { ICar, IReturnCarBooking } from './car.interface';
 import { Car } from './car.model';
 import { Booking } from '../Booking/booking.model';
 import mongoose from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { carSearchableFields } from './car.constant';
 
 // creating a car in the db
 const createCarIntoDB = async (payload: ICar) => {
@@ -12,13 +14,23 @@ const createCarIntoDB = async (payload: ICar) => {
 };
 
 // getting all the cars
-const getAllCarsFromDB = async () => {
-  const result = await Car.find();
+const getAllCarsFromDB = async (query: Record<string, unknown>) => {
+  const productQuery = new QueryBuilder(Car.find(), query)
+    .search(carSearchableFields)
+    .filter()
+    .sort()
+    .priceRange()
+    .paginate()
+    .fields();
+
+  const result = await productQuery.modelQuery;
+  const meta = await productQuery.countTotal();
+  
   // checking if there is any cars
   if (result.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
-  return result;
+  return {result , meta};
 };
 
 // get single car
