@@ -8,7 +8,12 @@ const app: Application = express();
 
 //parsers
 app.use(express.json());
-app.use(cors({ origin: ['http://localhost:5173'] }));
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://steer-away-rental.vercel.app'],
+    credentials: true,
+  }),
+);
 app.use(cookieParser());
 
 //application routes
