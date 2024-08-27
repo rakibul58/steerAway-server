@@ -24,7 +24,7 @@ const userSchema = new Schema<IUser, UserModel>(
     role: {
       type: String,
       enum: userTypes,
-      default: USER_ROLE.user
+      default: USER_ROLE.user,
     },
     phone: {
       type: String,

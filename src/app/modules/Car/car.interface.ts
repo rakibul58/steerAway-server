@@ -9,6 +9,7 @@ export interface ICar {
   features: string[];
   pricePerHour: number;
   carType: string | null;
+  image?: string;
   isDeleted?: boolean;
 }
 

@@ -25,12 +25,12 @@ const getAllCarsFromDB = async (query: Record<string, unknown>) => {
 
   const result = await productQuery.modelQuery;
   const meta = await productQuery.countTotal();
-  
+
   // checking if there is any cars
   if (result.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
-  return {result , meta};
+  return { result, meta };
 };
 
 // get single car

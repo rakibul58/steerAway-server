@@ -40,6 +40,11 @@ const carSchema = new Schema<ICar, CarModel>(
       type: String || null,
       default: null,
     },
+    image: {
+      type: String,
+      default:
+        'https://res.cloudinary.com/dk4zufod5/image/upload/v1724772905/kd9sy8amvzaky9popnfs.jpg',
+    },
     isDeleted: {
       type: Boolean,
       default: false,

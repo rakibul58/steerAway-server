@@ -17,6 +17,12 @@ const createCarValidationSchema = z.object({
       .optional()
       .default('available'),
     features: z.array(z.string(), { required_error: 'features is required!' }),
+    image: z
+      .string()
+      .optional()
+      .default(
+        'https://res.cloudinary.com/dk4zufod5/image/upload/v1724772905/kd9sy8amvzaky9popnfs.jpg',
+      ),
     pricePerHour: z.number({ required_error: 'pricePerHour is required!' }),
     isDeleted: z.boolean().optional().default(false),
   }),
@@ -46,6 +52,7 @@ const updateCarValidationSchema = z.object({
     pricePerHour: z
       .number({ required_error: 'pricePerHour is required!' })
       .optional(),
+    image: z.string().optional(),
     isDeleted: z.boolean().optional(),
   }),
 });
