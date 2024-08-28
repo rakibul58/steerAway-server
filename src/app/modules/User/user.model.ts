@@ -28,11 +28,11 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     phone: {
       type: String,
-      required: true,
+      default: null,
     },
     address: {
       type: String,
-      required: true,
+      default: null,
     },
     passwordChangedAt: {
       type: Date,

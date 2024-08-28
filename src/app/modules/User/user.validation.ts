@@ -18,11 +18,8 @@ const userRegisterValidationSchema = z.object({
       .string()
       .max(20, "Password can't be more than 20 characters!")
       .optional(),
-    phone: z
-      .string({ required_error: 'Phone number is required!' })
-      .min(9, 'Please enter a valid phone!')
-      .trim(),
-    address: z.string({ required_error: 'Address is required!' }).trim(),
+    phone: z.string().optional().nullable().default(null),
+    address: z.string().optional().nullable().default(null),
   }),
 });
 
