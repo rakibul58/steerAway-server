@@ -134,6 +134,7 @@ const returnCarUpdateInDB = async (payload: IReturnCarBooking) => {
       {
         endTime: payload.endTime,
         totalCost: totalCost,
+        status: 'Returned'
       },
       {
         runValidators: true,

@@ -19,7 +19,23 @@ const userRegisterValidationSchema = z.object({
       .max(20, "Password can't be more than 20 characters!")
       .optional(),
     phone: z.string().optional().nullable().default(null),
+    preferences: z.string().optional().nullable().default(null),
     address: z.string().optional().nullable().default(null),
+  }),
+});
+
+// Validation for update profile
+const profileUpdateValidation = z.object({
+  body: z.object({
+    name: z.string().trim().optional(),
+    email: z
+      .string()
+      .trim()
+      .email({ message: 'Please enter a valid email' })
+      .optional(),
+    phone: z.string().optional().nullable().default(null),
+    address: z.string().optional().nullable().default(null),
+    preferences: z.string().optional().nullable().default(null),
   }),
 });
 
@@ -48,4 +64,5 @@ export const UserValidations = {
   userRegisterValidationSchema,
   signinValidationSchema,
   refreshTokenValidationSchema,
+  profileUpdateValidation
 };

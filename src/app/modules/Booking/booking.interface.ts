@@ -13,7 +13,7 @@ export interface IBooking {
   paidAt?: string;
   nidOrPassport: string;
   drivingLicense: string;
-  status: 'Pending' | 'Approved' | 'Cancelled';
+  status: 'Pending' | 'Approved' | 'Cancelled'| 'Returned';
 }
 
 export interface ICreateBookingData {

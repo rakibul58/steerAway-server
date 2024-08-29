@@ -68,7 +68,7 @@ const bookingSchema = new Schema<IBooking>(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Approved', 'Cancelled'],
+      enum: ['Pending', 'Approved', 'Cancelled', 'Returned'],
       default: 'Pending',
     },
   },

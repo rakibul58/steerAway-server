@@ -12,6 +12,7 @@ export interface IUser {
   phone?: string;
   address?: string;
   isDeleted: boolean;
+  preferences?: string;
   passwordChangedAt?: Date;
 }
 

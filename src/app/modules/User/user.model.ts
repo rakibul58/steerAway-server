@@ -37,6 +37,10 @@ const userSchema = new Schema<IUser, UserModel>(
     passwordChangedAt: {
       type: Date,
     },
+    preferences: {
+      type: String,
+      default: null,
+    },
     isDeleted: {
       type: Boolean,
       default: false,

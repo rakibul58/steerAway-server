@@ -2,6 +2,8 @@ import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { UserValidations } from '../User/user.validation';
 import { AuthControllers } from './auth.controller';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../User/user.constant';
 
 const router = express.Router();
 
@@ -22,5 +24,13 @@ router.post(
   validateRequest(UserValidations.refreshTokenValidationSchema),
   AuthControllers.refreshToken,
 );
+
+router
+  .route('/me')
+  .get(auth(USER_ROLE.user, USER_ROLE.admin), AuthControllers.getProfileData)
+  .put(
+    auth(USER_ROLE.user, USER_ROLE.admin),
+    AuthControllers.updateProfileData,
+  );
 
 export const AuthRoutes = router;

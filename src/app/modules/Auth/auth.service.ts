@@ -4,6 +4,7 @@ import { ISignInUser, IUser } from '../User/user.interface';
 import { User } from '../User/user.model';
 import config from '../../config';
 import { createToken, verifyToken } from './auth.utils';
+import { JwtPayload } from 'jsonwebtoken';
 
 const registerUserIntoDB = async (payload: IUser) => {
   const user = await User.isUserExistsByEmail(payload.email);
@@ -99,8 +100,50 @@ const refreshToken = async (token: string) => {
   };
 };
 
+const getProfileFromDB = async (payload: JwtPayload) => {
+  // checking if the user is exist
+  const user = await User.isUserExistsByEmail(payload.email);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
+  }
+
+  // checking if the user is already deleted
+  const isDeleted = user?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
+  }
+
+  user.password = '';
+
+  return user;
+};
+
+const updateProfileInDB = async (user: JwtPayload, payload: Partial<IUser>) => {
+  // checking if the user is exist
+  const userData = await User.isUserExistsByEmail(user.email);
+
+  if (!userData) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
+  }
+
+  // checking if the user is already deleted
+  const isDeleted = userData?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
+  }
+
+  const result = await User.updateOne({ email: user.email }, payload);
+
+  return result;
+};
+
 export const AuthServices = {
   registerUserIntoDB,
   signInUserFromDB,
   refreshToken,
+  getProfileFromDB,
+  updateProfileInDB,
 };

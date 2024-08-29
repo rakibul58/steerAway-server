@@ -46,8 +46,32 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
+const getProfileData = catchAsync(async (req, res) => {
+  const user = await AuthServices.getProfileFromDB(req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile is retrieved successfully!',
+    data: user,
+  });
+});
+
+const updateProfileData = catchAsync(async (req, res) => {
+  const result = await AuthServices.updateProfileInDB(req.user, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile is updated successfully!',
+    data: result,
+  });
+});
+
 export const AuthControllers = {
   signupUser,
   signInUser,
   refreshToken,
+  getProfileData,
+  updateProfileData
 };
