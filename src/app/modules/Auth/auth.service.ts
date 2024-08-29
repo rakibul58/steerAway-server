@@ -39,13 +39,13 @@ const signInUserFromDB = async (payload: ISignInUser) => {
 
   // creating token
   const accessToken = createToken(
-    jwtPayload,
+    jwtPayload as { role: string; email: string },
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string,
   );
 
   const refreshToken = createToken(
-    jwtPayload,
+    jwtPayload as { role: string; email: string },
     config.jwt_refresh_secret as string,
     config.jwt_refresh_expires_in as string,
   );
@@ -89,7 +89,7 @@ const refreshToken = async (token: string) => {
   };
 
   const accessToken = createToken(
-    jwtPayload,
+    jwtPayload as { role: string; email: string },
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string,
   );

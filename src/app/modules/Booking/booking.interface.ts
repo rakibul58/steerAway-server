@@ -7,10 +7,25 @@ export interface IBooking {
   startTime: string;
   endTime: string;
   totalCost: number;
+  additionalFeatures?: IAdditionalFeatures;
+  paymentStatus?: 'Paid' | 'Pending';
+  transactionId?: string | null;
+  paidAt?: string;
+  nidOrPassport: string;
+  drivingLicense: string;
 }
 
 export interface ICreateBookingData {
   carId: string;
   date: string;
   startTime: string;
+  additionalFeatures: IAdditionalFeatures;
+  nidOrPassport: string;
+  drivingLicense: string;
+}
+
+export interface IAdditionalFeatures {
+  insurance: boolean;
+  gps: boolean;
+  childSeat: boolean;
 }

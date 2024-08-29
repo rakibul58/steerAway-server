@@ -1,5 +1,21 @@
 import { Schema, model } from 'mongoose';
-import { IBooking } from './booking.interface';
+import { IAdditionalFeatures, IBooking } from './booking.interface';
+
+const additionalFeaturesSchema = new Schema<IAdditionalFeatures>({
+  insurance: {
+    type: Boolean,
+    default: false
+  },
+  gps: {
+    type: Boolean,
+    default: false
+  },
+  childSeat: {
+    type: Boolean,
+    default: false
+  },
+});
+
 // booking schema
 const bookingSchema = new Schema<IBooking>(
   {
@@ -28,6 +44,27 @@ const bookingSchema = new Schema<IBooking>(
     totalCost: {
       type: Number,
       default: 0,
+    },
+    additionalFeatures: additionalFeaturesSchema,
+    paymentStatus: {
+      type: String,
+      enum: ['Paid', 'Pending'],
+      default: 'Pending',
+    },
+    transactionId: {
+      type: String,
+      default: null,
+    },
+    paidAt: {
+      type: String,
+    },
+    nidOrPassport:{
+      type: String,
+      required: true,
+    },
+    drivingLicense:{
+      type: String,
+      required: true,
     },
   },
   {
