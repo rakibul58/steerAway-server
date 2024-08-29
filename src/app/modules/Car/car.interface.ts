@@ -8,12 +8,13 @@ export interface ICar {
   status?: 'available' | 'unavailable';
   features: string[];
   pricePerHour: number;
-  carType: string | null;
+  carType: string;
   image?: string;
   isDeleted?: boolean;
   insurancePrice?: number;
   gpsPrice?: number;
   childSeatPrice?: number;
+  year?: string
 }
 
 export interface IReturnCarBooking {

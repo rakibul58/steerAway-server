@@ -9,6 +9,9 @@ const carSchema = new Schema<ICar, CarModel>(
       required: true,
       unique: true,
     },
+    year: {
+      type: String,
+    },
     description: {
       type: String,
       required: true,
@@ -37,7 +40,7 @@ const carSchema = new Schema<ICar, CarModel>(
       required: true,
     },
     carType: {
-      type: String || null,
+      type: String,
       default: null,
     },
     image: {
