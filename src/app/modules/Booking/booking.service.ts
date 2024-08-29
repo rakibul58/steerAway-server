@@ -8,6 +8,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../User/user.model';
 import { Booking } from './booking.model';
 import mongoose from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 // booking a car
 const bookingACarFromDB = async (
@@ -27,6 +28,12 @@ const bookingACarFromDB = async (
   const userResult = await User.findOne({ email: userData.email });
   if (!userResult) {
     throw new AppError(httpStatus.NOT_FOUND, 'This User is not found');
+  }
+
+  const isDeleted = userResult?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
   }
 
   // starting mongoose session
@@ -80,37 +87,57 @@ const bookingACarFromDB = async (
   }
 };
 
-const getAllBookingFromDB = async (carId: string, date: string) => {
-  const query: { car?: string; date?: string } = {};
-  // handling the query
-  if (carId?.length) {
-    query.car = carId;
-  }
-  if (date?.length) {
-    query.date = date;
-  }
-  const result = await Booking.find(query).populate('car').populate('user');
-  // checking the if there is any data
+const getAllBookingFromDB = async (query: Record<string, unknown>) => {
+  const BookingQuery = new QueryBuilder(Booking.find().populate('car').populate('user'), query)
+    .search([])
+    .filter()
+    .sort()
+    .priceRange()
+    .paginate()
+    .fields();
+
+  const result = await BookingQuery.modelQuery;
+  const meta = await BookingQuery.countTotal();
+
+  // checking if there is any cars
   if (result.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
-  return result;
+  return { result, meta };
 };
 
-const getIndividualUserBookings = async (userData: JwtPayload) => {
+const getIndividualUserBookings = async (userData: JwtPayload, query: Record<string, unknown>) => {
   const userResult = await User.findOne({ email: userData.email });
   // checking if the user exists
   if (!userResult) {
     throw new AppError(httpStatus.NOT_FOUND, 'This User is not found');
   }
 
-  const result = await Booking.find({ user: userResult._id })
-    .populate('car')
-    .populate('user');
+  const isDeleted = userResult?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
+  }
+
+  const BookingQuery = new QueryBuilder(Booking.find({ user: userResult._id })
+  .populate('car')
+  .populate('user')
+  .sort('-createdAt'), query)
+    .search([])
+    .filter()
+    .sort()
+    .priceRange()
+    .paginate()
+    .fields();
+
+  const result = await BookingQuery.modelQuery;
+  const meta = await BookingQuery.countTotal();
+
+  // checking if there is any cars
   if (result.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
-  return result;
+  return { result, meta };
 };
 
 export const BookingServices = {

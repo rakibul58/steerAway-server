@@ -15,7 +15,7 @@ const createCarIntoDB = async (payload: ICar) => {
 
 // getting all the cars
 const getAllCarsFromDB = async (query: Record<string, unknown>) => {
-  const productQuery = new QueryBuilder(Car.find(), query)
+  const CarQuery = new QueryBuilder(Car.find(), query)
     .search(carSearchableFields)
     .filter()
     .sort()
@@ -23,8 +23,8 @@ const getAllCarsFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-  const result = await productQuery.modelQuery;
-  const meta = await productQuery.countTotal();
+  const result = await CarQuery.modelQuery;
+  const meta = await CarQuery.countTotal();
 
   // checking if there is any cars
   if (result.length === 0) {
