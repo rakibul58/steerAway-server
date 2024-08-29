@@ -45,6 +45,18 @@ const carSchema = new Schema<ICar, CarModel>(
       default:
         'https://res.cloudinary.com/dk4zufod5/image/upload/v1724772905/kd9sy8amvzaky9popnfs.jpg',
     },
+    insurancePrice: {
+      type: Number,
+      default: 50,
+    },
+    childSeatPrice: {
+      type: Number,
+      default: 50,
+    },
+    gpsPrice: {
+      type: Number,
+      default: 50,
+    },
     isDeleted: {
       type: Boolean,
       default: false,

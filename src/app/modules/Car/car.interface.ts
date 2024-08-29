@@ -11,6 +11,9 @@ export interface ICar {
   carType: string | null;
   image?: string;
   isDeleted?: boolean;
+  insurancePrice?: number;
+  gpsPrice?: number;
+  childSeatPrice?: number;
 }
 
 export interface IReturnCarBooking {

@@ -4,15 +4,15 @@ import { IAdditionalFeatures, IBooking } from './booking.interface';
 const additionalFeaturesSchema = new Schema<IAdditionalFeatures>({
   insurance: {
     type: Boolean,
-    default: false
+    default: false,
   },
   gps: {
     type: Boolean,
-    default: false
+    default: false,
   },
   childSeat: {
     type: Boolean,
-    default: false
+    default: false,
   },
 });
 
@@ -58,13 +58,18 @@ const bookingSchema = new Schema<IBooking>(
     paidAt: {
       type: String,
     },
-    nidOrPassport:{
+    nidOrPassport: {
       type: String,
       required: true,
     },
-    drivingLicense:{
+    drivingLicense: {
       type: String,
       required: true,
+    },
+    status: {
+      type: String,
+      enum: ['Pending', 'Approved', 'Cancelled'],
+      default: 'Pending',
     },
   },
   {
