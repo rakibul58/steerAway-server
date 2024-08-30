@@ -25,6 +25,10 @@ router
   .delete(auth(USER_ROLE.user), BookingControllers.cancelMyBooking);
 
 router
+  .route('/payment/:id')
+  .post(auth(USER_ROLE.user), BookingControllers.PaymentBooking);
+
+router
   .route('/:id')
   .put(auth(USER_ROLE.admin), BookingControllers.updateBookingStatus);
 

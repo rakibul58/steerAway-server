@@ -56,9 +56,7 @@ const updateBookingStatus = catchAsync(async (req, res) => {
 });
 
 const cancelMyBooking = catchAsync(async (req, res) => {
-  const result = await BookingServices.cancelMyBookingInDB(
-    req.params.id,
-  );
+  const result = await BookingServices.cancelMyBookingInDB(req.params.id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -68,10 +66,22 @@ const cancelMyBooking = catchAsync(async (req, res) => {
   });
 });
 
+const PaymentBooking = catchAsync(async (req, res) => {
+  const result = await BookingServices.paymentBookingIntoDB(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Booking Payment Successful',
+    data: result,
+  });
+});
+
 export const BookingControllers = {
   createABooking,
   getAllBooking,
   getIndividualBookings,
   updateBookingStatus,
-  cancelMyBooking
+  cancelMyBooking,
+  PaymentBooking,
 };
