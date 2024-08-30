@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from 'http-status';
 import { Car } from '../Car/car.model';
-import { ICreateBookingData } from './booking.interface';
+import { IBooking, ICreateBookingData } from './booking.interface';
 import AppError from '../../errors/AppError';
 import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../User/user.model';
@@ -88,7 +88,10 @@ const bookingACarFromDB = async (
 };
 
 const getAllBookingFromDB = async (query: Record<string, unknown>) => {
-  const BookingQuery = new QueryBuilder(Booking.find().populate('car').populate('user'), query)
+  const BookingQuery = new QueryBuilder(
+    Booking.find().populate('car').populate('user'),
+    query,
+  )
     .search([])
     .filter()
     .sort()
@@ -106,7 +109,10 @@ const getAllBookingFromDB = async (query: Record<string, unknown>) => {
   return { result, meta };
 };
 
-const getIndividualUserBookings = async (userData: JwtPayload, query: Record<string, unknown>) => {
+const getIndividualUserBookings = async (
+  userData: JwtPayload,
+  query: Record<string, unknown>,
+) => {
   const userResult = await User.findOne({ email: userData.email });
   // checking if the user exists
   if (!userResult) {
@@ -119,10 +125,13 @@ const getIndividualUserBookings = async (userData: JwtPayload, query: Record<str
     throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
   }
 
-  const BookingQuery = new QueryBuilder(Booking.find({ user: userResult._id })
-  .populate('car')
-  .populate('user')
-  .sort('-createdAt'), query)
+  const BookingQuery = new QueryBuilder(
+    Booking.find({ user: userResult._id })
+      .populate('car')
+      .populate('user')
+      .sort('-createdAt'),
+    query,
+  )
     .search([])
     .filter()
     .sort()
@@ -140,8 +149,116 @@ const getIndividualUserBookings = async (userData: JwtPayload, query: Record<str
   return { result, meta };
 };
 
+// booking status update
+const updateBookingStatusInDB = async (
+  bookingId: string,
+  payload: { status: string },
+) => {
+  const booking = (await Booking.findById(bookingId)) as IBooking;
+  // starting mongoose session
+  const session = await mongoose.startSession();
+
+  try {
+    // starting transaction
+    session.startTransaction();
+    // updating the car with status unavailable
+    const updatedCar = await Car.findByIdAndUpdate(
+      booking.car,
+      {
+        status: payload.status == 'Approved' ? 'unavailable' : 'available',
+      },
+      {
+        runValidators: true,
+        new: true,
+        session,
+      },
+    );
+    // creating the booking
+    const bookedCar = await Booking.findByIdAndUpdate(
+      bookingId,
+      {
+        status: payload.status == 'Approved' ? 'Approved' : 'Cancelled',
+      },
+      {
+        runValidators: true,
+        new: true,
+        session,
+      },
+    );
+
+    // ending and committing session
+    await session.commitTransaction();
+    await session.endSession();
+
+    return { car: updatedCar, booking: bookedCar };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    // handling if there is an error
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(err);
+  }
+};
+
+//cancel user booking
+const cancelMyBookingInDB = async (bookingId: string) => {
+  const booking = (await Booking.findById(bookingId)) as IBooking;
+  // starting mongoose session
+  const session = await mongoose.startSession();
+
+  if (booking.status === 'Approved') {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      'Approved Booking can not be Cancelled!!',
+    );
+  }
+
+  try {
+    // starting transaction
+    session.startTransaction();
+    // updating the car with status unavailable
+    const updatedCar = await Car.findByIdAndUpdate(
+      booking.car,
+      {
+        status: 'available',
+      },
+      {
+        runValidators: true,
+        new: true,
+        session,
+      },
+    );
+    // creating the booking
+    const bookedCar = await Booking.findByIdAndUpdate(
+      bookingId,
+      {
+        status: 'Cancelled',
+      },
+      {
+        runValidators: true,
+        new: true,
+        session,
+      },
+    );
+
+    // ending and committing session
+    await session.commitTransaction();
+    await session.endSession();
+
+    return { car: updatedCar, booking: bookedCar };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    // handling if there is an error
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(err);
+  }
+};
+
 export const BookingServices = {
   bookingACarFromDB,
   getAllBookingFromDB,
   getIndividualUserBookings,
+  updateBookingStatusInDB,
+  cancelMyBookingInDB,
 };

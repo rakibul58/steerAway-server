@@ -20,4 +20,12 @@ router
   .route('/my-bookings')
   .get(auth(USER_ROLE.user), BookingControllers.getIndividualBookings);
 
+router
+  .route('/my-bookings/:id')
+  .delete(auth(USER_ROLE.user), BookingControllers.cancelMyBooking);
+
+router
+  .route('/:id')
+  .put(auth(USER_ROLE.admin), BookingControllers.updateBookingStatus);
+
 export const BookingRoutes = router;

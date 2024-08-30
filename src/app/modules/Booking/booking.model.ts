@@ -45,6 +45,22 @@ const bookingSchema = new Schema<IBooking>(
       type: Number,
       default: 0,
     },
+    rentingCost: {
+      type: Number,
+      default: 0,
+    },
+    gpsCost: {
+      type: Number,
+      default: 0,
+    },
+    insuranceCost: {
+      type: Number,
+      default: 0,
+    },
+    childSeatCost: {
+      type: Number,
+      default: 0,
+    },
     additionalFeatures: additionalFeaturesSchema,
     paymentStatus: {
       type: String,

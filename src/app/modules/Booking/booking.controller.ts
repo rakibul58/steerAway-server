@@ -28,7 +28,10 @@ const getAllBooking = catchAsync(async (req, res) => {
 });
 
 const getIndividualBookings = catchAsync(async (req, res) => {
-  const result = await BookingServices.getIndividualUserBookings(req.user, req.query);
+  const result = await BookingServices.getIndividualUserBookings(
+    req.user,
+    req.query,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -38,8 +41,37 @@ const getIndividualBookings = catchAsync(async (req, res) => {
   });
 });
 
+const updateBookingStatus = catchAsync(async (req, res) => {
+  const result = await BookingServices.updateBookingStatusInDB(
+    req.params.id,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Booking Status Updated',
+    data: result,
+  });
+});
+
+const cancelMyBooking = catchAsync(async (req, res) => {
+  const result = await BookingServices.cancelMyBookingInDB(
+    req.params.id,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Booking Cancelled Successfully',
+    data: result,
+  });
+});
+
 export const BookingControllers = {
   createABooking,
   getAllBooking,
   getIndividualBookings,
+  updateBookingStatus,
+  cancelMyBooking
 };

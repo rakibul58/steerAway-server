@@ -6,6 +6,10 @@ export interface IBooking {
   car: Types.ObjectId;
   startTime: string;
   endTime: string;
+  rentingCost: number;
+  insuranceCost: number;
+  childSeatCost: number;
+  gpsCost: number;
   totalCost: number;
   additionalFeatures?: IAdditionalFeatures;
   paymentStatus?: 'Paid' | 'Pending';
@@ -13,7 +17,7 @@ export interface IBooking {
   paidAt?: string;
   nidOrPassport: string;
   drivingLicense: string;
-  status: 'Pending' | 'Approved' | 'Cancelled'| 'Returned';
+  status: 'Pending' | 'Approved' | 'Cancelled' | 'Returned';
 }
 
 export interface ICreateBookingData {

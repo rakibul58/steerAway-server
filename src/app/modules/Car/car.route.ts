@@ -29,6 +29,6 @@ router
     validateRequest(CarValidations.updateCarValidationSchema),
     CarControllers.updateSingleCar,
   )
-  .delete(auth(USER_ROLE.admin), CarControllers.deleteSingleCar); // checking if the user role is user
+  .delete(auth(USER_ROLE.admin), CarControllers.deleteSingleCar); // checking if the user role is admin
 
 export const CarRoutes = router;

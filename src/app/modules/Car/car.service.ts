@@ -126,15 +126,32 @@ const returnCarUpdateInDB = async (payload: IReturnCarBooking) => {
     const totalEndTime =
       (Number(endTimeInHours) * 60.0 + Number(endTimeInMinutes)) / 60.0;
 
-    const totalCost = (totalEndTime - totalStartTime) * carData.pricePerHour;
-
+    const rentingCost = (totalEndTime - totalStartTime) * carData.pricePerHour;
+    let insuranceCost = 0,
+      childSeatCost = 0,
+      gpsCost = 0;
+    if (bookingData.additionalFeatures?.insurance == true) {
+      insuranceCost = Number(carData.insurancePrice);
+    }
+    if (bookingData.additionalFeatures?.childSeat == true) {
+      childSeatCost = Number(carData.childSeatPrice);
+    }
+    if (bookingData.additionalFeatures?.gps == true) {
+      gpsCost = Number(carData.gpsPrice);
+    }
     // updating Booking with totalCost and end time
     const updatedBooking = await Booking.findByIdAndUpdate(
       payload.bookingId,
       {
         endTime: payload.endTime,
-        totalCost: totalCost,
-        status: 'Returned'
+        rentingCost,
+        insuranceCost,
+        childSeatCost,
+        gpsCost,
+        totalCost: Number(
+          rentingCost + insuranceCost + childSeatCost + gpsCost,
+        ),
+        status: 'Returned',
       },
       {
         runValidators: true,
