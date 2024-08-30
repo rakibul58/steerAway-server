@@ -140,10 +140,31 @@ const updateProfileInDB = async (user: JwtPayload, payload: Partial<IUser>) => {
   return result;
 };
 
+const getAllUsersFromDB = async () => {
+  const result = await User.find();
+  return result;
+};
+
+const getSingleUserFromDB = async (id: string) => {
+  const result = await User.findById(id);
+  return result;
+};
+
+const updateUserFromDB = async (id: string, payload: Partial<IUser>) => {
+  const result = await User.findByIdAndUpdate(id, payload, {
+    runValidators: true,
+    new: true,
+  });
+  return result;
+};
+
 export const AuthServices = {
   registerUserIntoDB,
   signInUserFromDB,
   refreshToken,
   getProfileFromDB,
   updateProfileInDB,
+  getAllUsersFromDB,
+  getSingleUserFromDB,
+  updateUserFromDB,
 };

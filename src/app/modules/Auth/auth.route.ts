@@ -33,4 +33,15 @@ router
     AuthControllers.updateProfileData,
   );
 
+router
+  .route('/users/:id')
+  .get(auth(USER_ROLE.admin), AuthControllers.getSingleUser)
+  .put(
+    validateRequest(UserValidations.updateUserValidation),
+    auth(USER_ROLE.admin),
+    AuthControllers.updateUser,
+  );
+
+router.route('/users').get(auth(USER_ROLE.admin), AuthControllers.getAllUsers);
+
 export const AuthRoutes = router;

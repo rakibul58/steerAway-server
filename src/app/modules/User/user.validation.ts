@@ -25,6 +25,27 @@ const userRegisterValidationSchema = z.object({
 });
 
 // Validation for update profile
+const updateUserValidation = z.object({
+  body: z.object({
+    name: z.string().trim().optional(),
+    email: z
+      .string()
+      .trim()
+      .email({ message: 'Please enter a valid email' })
+      .optional(),
+    role: z
+      .enum(['admin', 'user'], {
+        invalid_type_error: 'Enter a valid role',
+      })
+      .optional()
+      .default('user'),
+    phone: z.string().optional().nullable().default(null),
+    address: z.string().optional().nullable().default(null),
+    preferences: z.string().optional().nullable().default(null),
+  }),
+});
+
+// Validation for update profile
 const profileUpdateValidation = z.object({
   body: z.object({
     name: z.string().trim().optional(),
@@ -64,5 +85,6 @@ export const UserValidations = {
   userRegisterValidationSchema,
   signinValidationSchema,
   refreshTokenValidationSchema,
-  profileUpdateValidation
+  profileUpdateValidation,
+  updateUserValidation
 };

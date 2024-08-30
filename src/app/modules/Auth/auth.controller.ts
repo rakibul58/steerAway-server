@@ -68,10 +68,46 @@ const updateProfileData = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await AuthServices.getAllUsersFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Users Fetched successfully!',
+    data: result,
+  });
+});
+
+const getSingleUser = catchAsync(async (req, res) => {
+  const result = await AuthServices.getSingleUserFromDB(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User Fetched successfully!',
+    data: result,
+  });
+});
+
+const updateUser = catchAsync(async (req, res) => {
+  const result = await AuthServices.updateUserFromDB(req.params.id , req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User Updated successfully!',
+    data: result,
+  });
+});
+
 export const AuthControllers = {
   signupUser,
   signInUser,
   refreshToken,
   getProfileData,
-  updateProfileData
+  updateProfileData,
+  getAllUsers,
+  getSingleUser,
+  updateUser
 };
