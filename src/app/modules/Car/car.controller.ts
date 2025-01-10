@@ -38,6 +38,28 @@ const getSingleCar = catchAsync(async (req, res) => {
   });
 });
 
+const getRelatedCars = catchAsync(async (req, res) => {
+  const result = await CarServices.getRelatedCarsFromDB(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Cars retrieved successfully',
+    data: result,
+  });
+});
+
+const getCarCategories = catchAsync(async (req, res) => {
+  const result = await CarServices.getCarCategoriesFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Cars retrieved successfully',
+    data: result,
+  });
+});
+
 const updateSingleCar = catchAsync(async (req, res) => {
   const result = await CarServices.updateACarInDB(req.params.id, req.body);
 
@@ -78,4 +100,6 @@ export const CarControllers = {
   updateSingleCar,
   deleteSingleCar,
   returnCarUpdate,
+  getCarCategories,
+  getRelatedCars
 };

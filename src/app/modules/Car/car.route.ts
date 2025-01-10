@@ -21,6 +21,9 @@ router
     CarControllers.returnCarUpdate,
   );
 
+router.route('/getCarCategories').get(CarControllers.getCarCategories);
+router.route('/related/:id').get(CarControllers.getRelatedCars);
+
 router
   .route('/:id')
   .get(CarControllers.getSingleCar)
@@ -29,6 +32,6 @@ router
     validateRequest(CarValidations.updateCarValidationSchema),
     CarControllers.updateSingleCar,
   )
-  .delete(auth(USER_ROLE.admin), CarControllers.deleteSingleCar); // checking if the user role is admin
+  .delete(auth(USER_ROLE.admin), CarControllers.deleteSingleCar);
 
 export const CarRoutes = router;

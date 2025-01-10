@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import { BookingServices } from './booking.service';
 import sendResponse from '../../utils/sendResponse';
+import { VerifyBookingQuery } from './booking.interface';
 
 // booking controllers
 
@@ -77,6 +78,14 @@ const PaymentBooking = catchAsync(async (req, res) => {
   });
 });
 
+const verifyPayment = catchAsync(async (req, res) => {
+  const result = await BookingServices.verifyBookingPaymentInDB(
+    req.query as unknown as VerifyBookingQuery,
+  );
+
+  res.send(result);
+});
+
 export const BookingControllers = {
   createABooking,
   getAllBooking,
@@ -84,4 +93,5 @@ export const BookingControllers = {
   updateBookingStatus,
   cancelMyBooking,
   PaymentBooking,
+  verifyPayment,
 };

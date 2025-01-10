@@ -17,6 +17,10 @@ router
   );
 
 router
+  .route('/verify-payment')
+  .post(BookingControllers.verifyPayment);
+
+router
   .route('/my-bookings')
   .get(auth(USER_ROLE.user), BookingControllers.getIndividualBookings);
 

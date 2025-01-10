@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Payment Failed</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+        <style>
+                @keyframes crossmark {
+                        0% {
+                                transform: scale(0) rotate(45deg);
+                                opacity: 0;
+                        }
+
+                        50% {
+                                transform: scale(1.2) rotate(45deg);
+                        }
+
+                        100% {
+                                transform: scale(1) rotate(45deg);
+                                opacity: 1;
+                        }
+                }
+
+                .crossmark {
+                        animation: crossmark 0.8s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+                }
+
+                .fade-in {
+                        opacity: 0;
+                        animation: fadeIn 1s ease-in forwards;
+                        animation-delay: 0.5s;
+                }
+
+                @keyframes fadeIn {
+                        to {
+                                opacity: 1;
+                        }
+                }
+
+                .error-shake {
+                        animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+                }
+
+                @keyframes shake {
+
+                        10%,
+                        90% {
+                                transform: translate3d(-1px, 0, 0);
+                        }
+
+                        20%,
+                        80% {
+                                transform: translate3d(2px, 0, 0);
+                        }
+
+                        30%,
+                        50%,
+                        70% {
+                                transform: translate3d(-4px, 0, 0);
+                        }
+
+                        40%,
+                        60% {
+                                transform: translate3d(4px, 0, 0);
+                        }
+                }
+        </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
+        <div class="error-shake max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
+                <div class="text-center">
+                        <div class="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                                <svg class="crossmark w-8 h-8 text-red-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800">Payment Failed</h1>
+                        <p class="text-gray-600 mt-2">We couldn't process your payment</p>
+                </div>
+
+                <div class="fade-in divide-y divide-gray-200">
+                        <div class="py-4">
+                                <p class="text-sm text-gray-600">Hello,</p>
+                                <p class="text-lg font-medium text-gray-800">{{name}}</p>
+                        </div>
+
+                        <div class="py-4">
+                                <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm text-gray-600">Amount</span>
+                                        <span class="text-lg font-semibold text-gray-800">${{amount}}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-600">Transaction ID</span>
+                                        <span class="text-sm font-mono text-gray-700">{{transactionId}}</span>
+                                </div>
+                        </div>
+
+                        <div class="pt-4 space-y-4">
+                                <div class="bg-red-50 rounded-lg p-4">
+                                        <div class="flex">
+                                                <div class="shrink-0">
+                                                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20"
+                                                                fill="currentColor">
+                                                                <path fill-rule="evenodd"
+                                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                                        clip-rule="evenodd" />
+                                                        </svg>
+                                                </div>
+                                                <div class="ml-3">
+                                                        <h3 class="text-sm font-medium text-red-800">Common reasons for
+                                                                payment failure:</h3>
+                                                        <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                                                                <li>Insufficient funds</li>
+                                                                <li>Invalid card details</li>
+                                                                <li>Bank declined transaction</li>
+                                                        </ul>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+
+                <div class="fade-in pt-6 space-y-4">
+
+                </div>
+        </div>
+</body>
+
+</html>

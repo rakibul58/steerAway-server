@@ -9,9 +9,16 @@ export interface IBooking {
   rentingCost: number;
   insuranceCost: number;
   childSeatCost: number;
+  additionalCosts: {
+    insuranceCost: number;
+    gpsCost: number;
+    childSeatCost: number;
+  };
   gpsCost: number;
   totalCost: number;
   additionalFeatures?: IAdditionalFeatures;
+  duration: 'hourly' | 'daily' | 'weekly' | 'monthly';
+  baseCost: number;
   paymentStatus?: 'Paid' | 'Pending';
   transactionId?: string | null;
   paidAt?: string;
@@ -27,10 +34,19 @@ export interface ICreateBookingData {
   additionalFeatures: IAdditionalFeatures;
   nidOrPassport: string;
   drivingLicense: string;
+  duration: 'hourly' | 'daily' | 'weekly' | 'monthly';
 }
 
 export interface IAdditionalFeatures {
   insurance: boolean;
   gps: boolean;
   childSeat: boolean;
+}
+
+export interface VerifyBookingQuery {
+  transactionId: string;
+  bookingId: string;
+  status: string;
+  customerName: string;
+  totalPrice: string;
 }

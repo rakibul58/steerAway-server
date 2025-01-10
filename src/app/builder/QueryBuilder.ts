@@ -94,6 +94,83 @@ class QueryBuilder<T> {
     return this;
   }
 
+  filterByPriceRange(priceField: string) {
+    const minPrice = this?.query?.minPrice;
+    const maxPrice = this?.query?.maxPrice;
+    const priceFilter: Record<string, unknown> = {};
+
+    if (minPrice !== undefined) {
+      priceFilter.$gte = minPrice;
+    }
+
+    if (maxPrice !== undefined) {
+      priceFilter.$lte = maxPrice;
+    }
+
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      this.modelQuery = this.modelQuery.find({
+        [`pricing.${priceField}`]: priceFilter,
+      } as FilterQuery<T>);
+    }
+
+    return this;
+  }
+
+  filterBySpecifications() {
+    const { transmission, fuelType, seatingCapacity, minMileage, maxMileage } =
+      this.query;
+
+    if (transmission) {
+      this.modelQuery = this.modelQuery.find({
+        'specifications.transmission': transmission,
+      } as FilterQuery<T>);
+    }
+
+    if (fuelType) {
+      this.modelQuery = this.modelQuery.find({
+        'specifications.fuelType': fuelType,
+      } as FilterQuery<T>);
+    }
+
+    if (seatingCapacity) {
+      this.modelQuery = this.modelQuery.find({
+        'specifications.seatingCapacity': seatingCapacity,
+      } as FilterQuery<T>);
+    }
+
+    if (minMileage || maxMileage) {
+      const mileageFilter: Record<string, unknown> = {};
+      if (minMileage) mileageFilter.$gte = minMileage;
+      if (maxMileage) mileageFilter.$lte = maxMileage;
+
+      this.modelQuery = this.modelQuery.find({
+        'specifications.mileage': mileageFilter,
+      } as FilterQuery<T>);
+    }
+
+    return this;
+  }
+
+  filterByStatus() {
+    const { status } = this.query;
+    if (status) {
+      this.modelQuery = this.modelQuery.find({
+        status,
+      } as FilterQuery<T>);
+    }
+    return this;
+  }
+
+  filterByRating() {
+    const { minRating } = this.query;
+    if (minRating) {
+      this.modelQuery = this.modelQuery.find({
+        'ratingStats.averageRating': { $gte: Number(minRating) },
+      } as FilterQuery<T>);
+    }
+    return this;
+  }
+
   async countTotal() {
     const totalQueries = this.modelQuery.getFilter();
     const total = await this.modelQuery.model.countDocuments(totalQueries);

@@ -16,7 +16,6 @@ const additionalFeaturesSchema = new Schema<IAdditionalFeatures>({
   },
 });
 
-// booking schema
 const bookingSchema = new Schema<IBooking>(
   {
     date: {
@@ -41,25 +40,32 @@ const bookingSchema = new Schema<IBooking>(
       type: String,
       default: null,
     },
+    duration: {
+      type: String,
+      enum: ['hourly', 'daily', 'weekly', 'monthly'],
+      required: true,
+    },
     totalCost: {
       type: Number,
       default: 0,
     },
-    rentingCost: {
+    baseCost: {
       type: Number,
       default: 0,
     },
-    gpsCost: {
-      type: Number,
-      default: 0,
-    },
-    insuranceCost: {
-      type: Number,
-      default: 0,
-    },
-    childSeatCost: {
-      type: Number,
-      default: 0,
+    additionalCosts: {
+      insuranceCost: {
+        type: Number,
+        default: 0,
+      },
+      gpsCost: {
+        type: Number,
+        default: 0,
+      },
+      childSeatCost: {
+        type: Number,
+        default: 0,
+      }
     },
     additionalFeatures: additionalFeaturesSchema,
     paymentStatus: {

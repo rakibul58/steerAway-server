@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Payment Success</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+        <style>
+                @keyframes checkmark {
+                        0% {
+                                transform: scale(0);
+                                opacity: 0;
+                        }
+
+                        50% {
+                                transform: scale(1.2);
+                        }
+
+                        100% {
+                                transform: scale(1);
+                                opacity: 1;
+                        }
+                }
+
+                .checkmark {
+                        animation: checkmark 0.8s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+                }
+
+                .fade-in {
+                        opacity: 0;
+                        animation: fadeIn 1s ease-in forwards;
+                        animation-delay: 0.5s;
+                }
+
+                @keyframes fadeIn {
+                        to {
+                                opacity: 1;
+                        }
+                }
+
+                .card-shine {
+                        position: relative;
+                        overflow: hidden;
+                }
+
+                .card-shine::after {
+                        content: '';
+                        position: absolute;
+                        top: -50%;
+                        left: -50%;
+                        width: 200%;
+                        height: 200%;
+                        background: linear-gradient(to bottom right,
+                                        rgba(255, 255, 255, 0) 0%,
+                                        rgba(255, 255, 255, 0.1) 50%,
+                                        rgba(255, 255, 255, 0) 100%);
+                        transform: rotate(45deg);
+                        animation: shine 2s infinite;
+                }
+
+                @keyframes shine {
+                        to {
+                                transform: rotate(45deg) translate(50%, 50%);
+                        }
+                }
+        </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
+        <div class="card-shine max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
+                <div class="text-center">
+                        <div class="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                                <svg class="checkmark w-8 h-8 text-green-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                </svg>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800">Payment Successful</h1>
+                        <p class="text-gray-600 mt-2">Your booking has been confirmed</p>
+                </div>
+
+                <div class="fade-in divide-y divide-gray-200">
+                        <div class="py-4">
+                                <p class="text-sm text-gray-600">Hello,</p>
+                                <p class="text-lg font-medium text-gray-800">{{name}}</p>
+                        </div>
+
+                        <div class="py-4">
+                                <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm text-gray-600">Amount Paid</span>
+                                        <span class="text-lg font-semibold text-gray-800">${{amount}}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-600">Transaction ID</span>
+                                        <span class="text-sm font-mono text-gray-700">{{transactionId}}</span>
+                                </div>
+                        </div>
+
+                        <div class="pt-4">
+                                <p class="text-sm text-gray-600 text-center">
+                                        A confirmation email has been sent to your registered email address
+                                </p>
+                        </div>
+                </div>
+        </div>
+</body>
+
+</html>
