@@ -51,6 +51,8 @@ const userSchema = new Schema<IUser, UserModel>(
   },
 );
 
+userSchema.index({ email: 1, name: 1 });
+
 // hashing the password before entering into db
 userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
