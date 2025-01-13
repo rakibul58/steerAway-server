@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Booking } from '../Booking/booking.model';
 import { Car } from '../Car/car.model';
+import { User } from '../User/user.model';
 
 const getAdminDashboard = async () => {
   const today = new Date();
@@ -55,16 +56,17 @@ const getAdminDashboard = async () => {
 };
 
 const getUserStats = async (email: string) => {
+  const user = await User.isUserExistsByEmail(email);
   const today = new Date();
   const lastMonth = new Date(today.setMonth(today.getMonth() - 1));
 
   const userBookings = await Booking.find({
-    email: email,
+    user: user?._id,
     createdAt: { $gte: lastMonth },
   }).populate({ path: 'car', model: Car, select: 'name pricing' });
 
   const activeRentals = userBookings
-    .filter(b => b.status === 'Approved' && !b.endTime)
+    .filter(b => b.status === 'Approved')
     .map(b => ({
       id: b._id,
       car: (b.car as any).name,
