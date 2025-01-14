@@ -13,7 +13,7 @@ import { initiatePayment, verifyPayment } from './booking.utlis';
 import { IUser } from '../User/user.interface';
 import { join } from 'path';
 import { readFileSync } from 'fs';
-import crypto from "crypto"
+import crypto from 'crypto';
 
 const calculateCosts = (
   car: any,
@@ -236,12 +236,13 @@ const paymentBookingIntoDB = async (bookingId: string) => {
   });
 
   const paymentData = {
-    transactionId: `TXN-${booking._id}`,
+    transactionId: `TXN-${booking._id}-${new Date().getTime()}`,
     totalPrice: booking.totalCost,
     customerName: user.name,
     customerEmail: user.email,
     customerPhone: user.phone,
     customerAddress: user.address,
+    bookingId: booking._id,
   };
 
   return await initiatePayment(paymentData);
@@ -258,15 +259,10 @@ const verifyBookingPaymentInDB = async (query: VerifyBookingQuery) => {
       await Booking.findByIdAndUpdate(
         query.bookingId,
         {
+          transactionId: query.transactionId,
           paymentStatus: 'Paid',
           paidAt: new Date().toISOString(),
         },
-        { session },
-      );
-
-      await Car.findOneAndUpdate(
-        { bookings: query.bookingId },
-        { status: 'available' },
         { session },
       );
 

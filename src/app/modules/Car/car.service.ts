@@ -169,8 +169,8 @@ const normalizeTimeString = (time: string): string => {
 const calculateDuration = (
   startDate: string,
   startTime: string,
-  endDate: string,
   endTime: string,
+  endDate: string,
 ): { days: number; hours: number } => {
   try {
     // Normalize time strings
@@ -231,12 +231,14 @@ const calculateRentingCost = (
     throw new AppError(httpStatus.BAD_REQUEST, 'Invalid pricing rates');
   }
 
+  console.log({ startDate, startTime, endDate, endTime });
   const { days, hours } = calculateDuration(
     startDate,
     startTime,
     endDate,
     endTime,
   );
+
   let cost = 0;
 
   switch (duration) {
